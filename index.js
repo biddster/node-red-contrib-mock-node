@@ -40,7 +40,7 @@ Context.prototype.set = function (key, value) {
 };
 
 module.exports = function (nodeRedModule, config) {
-    var _events = [], _status = undefined, _error = undefined, _messages = [], _context = new Context('node');
+    var _events = [], _status = undefined, _error = undefined, _sent = [], _context = new Context('node');
     _context.flow = new Context('flow');
     _context.global = new Context('global');
     var RED = {
@@ -73,11 +73,11 @@ module.exports = function (nodeRedModule, config) {
         },
         send: function (msg) {
             assert(msg);
-            _messages.push(msg);
+            _sent.push(msg);
         },
-        messages: function (messages) {
-            if (messages) _messages = messages;
-            return _messages;
+        sent: function (index) {
+            if (typeof index !== 'undefined') return _sent[index];
+            return _sent;
         },
         context: function () {
             return _context;
