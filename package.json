@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "description": "Crude facility to mock NodeRED nodes for unit testing",
   "main": "index.js",
+  "keywords": [ "node-red", "mock", "test", "mocha" ],
   "scripts": {
     "test": "node_modules/.bin/mocha tests/test.js"
   },
