@@ -1,10 +1,11 @@
 {
   "name": "node-red-contrib-mock-node",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Crude facility to mock NodeRED nodes for unit testing",
   "main": "index.js",
+  "keywords": [ "node-red", "mock", "test", "mocha" ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha tests/test.js"
   },
   "author": "@biddster",
   "license": "MIT",
@@ -14,5 +15,8 @@
   },
   "bugs": {
     "url": "https://github.com/biddster/node-red-contrib-mock-node/issues"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.2"
   }
 }

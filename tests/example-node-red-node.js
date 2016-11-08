@@ -22,29 +22,25 @@
  THE SOFTWARE.
  */
 
-"use strict";
-var assert = require('assert');
-var nodeRedModule = require('./example-node-red-node.js');
-var mock = require('../index.js');
+module.exports = function (RED) {
+    'use strict';
 
+    RED.nodes.registerType('example-node-red-node', function (config) {
 
-describe('node-red-contrib-mock-node', function () {
+        RED.nodes.createNode(this, config);
+        var node = this;
 
-    it('should work', function () {
-        var node = mock(nodeRedModule, {
-            testValue: 3
+        node.context().set('test', config.testValue);
+        node.context().flow.set('test', config.testValue + 1);
+        node.context().global.set('test', config.testValue + 2);
+
+        node.on('input', function (msg) {
+            node.send(msg);
+            node.status({
+                fill: 'green',
+                shape: 'dot',
+                text: 'hello'
+            });
         });
-
-        assert.strictEqual(node.context().get('test'), 3);
-        assert.strictEqual(node.context().flow.get('test'), 4);
-        assert.strictEqual(node.context().global.get('test'), 5);
-
-        var msg = {topic: 'topic', payload: 'payload'};
-        node.emit('input', msg);
-        assert.strictEqual(node.sent(0), msg);
-
-        assert.strictEqual(node.status().fill, 'green');
-        assert.strictEqual(node.status().shape, 'dot');
-        assert.strictEqual(node.status().text, 'hello');
     });
-});
+};
