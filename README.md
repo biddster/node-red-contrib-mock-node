@@ -44,7 +44,13 @@ it('should test properly', function () {
 
     var node = mock(nodeRedModule, {
         testValue: 3
+    }, {
+        username: 'uname',
+        password: 'pword'
     });
+     
+    assert.strictEqual(node.credentials.username, 'uname');
+    assert.strictEqual(node.credentials.password, 'pword');    
 
     assert.strictEqual(node.context().get('test'), 3);
     assert.strictEqual(node.context().flow.get('test'), 4);
@@ -64,3 +70,4 @@ The key part is the arguments to the function mock:
 
 1.  This the the node red node you want to test, loaded via require.
 1.  This is the config that would be passed to the node if you have pressed deploy in the node red ui.
+1.  These are the credentials (http://nodered.org/docs/creating-nodes/credentials).
