@@ -39,7 +39,7 @@ Context.prototype.set = function (key, value) {
     this._values[key] = value;
 };
 
-module.exports = function (nodeRedModule, config) {
+module.exports = function (nodeRedModule, config, credentials) {
     var _events = [], _status = undefined, _error = undefined, _sent = [], _context = new Context('node');
     _context.flow = new Context('flow');
     _context.global = new Context('global');
@@ -64,6 +64,7 @@ module.exports = function (nodeRedModule, config) {
         on: function (event, eventFunc) {
             _events[event] = eventFunc;
         },
+        credentials: credentials,
         emit: function (event, data) {
             _events[event](data);
         },

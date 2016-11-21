@@ -33,7 +33,13 @@ describe('node-red-contrib-mock-node', function () {
     it('should work', function () {
         var node = mock(nodeRedModule, {
             testValue: 3
+        }, {
+            username: 'uname',
+            password: 'pword'
         });
+
+        assert.strictEqual(node.credentials.username, 'uname');
+        assert.strictEqual(node.credentials.password, 'pword');
 
         assert.strictEqual(node.context().get('test'), 3);
         assert.strictEqual(node.context().flow.get('test'), 4);
