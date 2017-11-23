@@ -36,6 +36,7 @@ module.exports = function (RED) {
 ```
 
 We can test it like so:
+
 ```
 var nodeRedModule = require('./example-node-red-node.js');
 var mock = require('node-red-contrib-mock-node');
@@ -47,10 +48,12 @@ it('should test properly', function () {
     }, {
         username: 'uname',
         password: 'pword'
+    }, function(module, node) {
+       // Do stuff with the module and node before the node's registerType callback is invoked.
     });
-     
+
     assert.strictEqual(node.credentials.username, 'uname');
-    assert.strictEqual(node.credentials.password, 'pword');    
+    assert.strictEqual(node.credentials.password, 'pword');
 
     assert.strictEqual(node.context().get('test'), 3);
     assert.strictEqual(node.context().flow.get('test'), 4);
@@ -68,6 +71,9 @@ it('should test properly', function () {
 
 The key part is the arguments to the function mock:
 
-1.  This the the node red node you want to test, loaded via require.
-1.  This is the config that would be passed to the node if you have pressed deploy in the node red ui.
-1.  These are the credentials (http://nodered.org/docs/creating-nodes/credentials).
+1. This the the node red node you want to test, loaded via require.
+1. This is the config that would be passed to the node if you have pressed deploy in the node
+   red ui.
+1. Optional - These are the credentials (http://nodered.org/docs/creating-nodes/credentials).
+1. Optional - A callback that is invoked before the node's registerType callback is invoked (see
+   example above).

@@ -22,21 +22,26 @@
  THE SOFTWARE.
  */
 
-"use strict";
+'use strict';
 var assert = require('assert');
 var nodeRedModule = require('./example-node-red-node.js');
 var mock = require('../index.js');
 
-
-describe('node-red-contrib-mock-node', function () {
-
-    it('should work', function () {
-        var node = mock(nodeRedModule, {
-            testValue: 3
-        }, {
-            username: 'uname',
-            password: 'pword'
-        });
+describe('node-red-contrib-mock-node', function() {
+    it('should work', function() {
+        var node = mock(
+            nodeRedModule,
+            {
+                testValue: 3
+            },
+            {
+                username: 'uname',
+                password: 'pword'
+            },
+            function(module, node) {
+                // Do stuff with the module and node before the node's registerType callback is invoked.
+            }
+        );
 
         assert.strictEqual(node.credentials.username, 'uname');
         assert.strictEqual(node.credentials.password, 'pword');
@@ -45,7 +50,7 @@ describe('node-red-contrib-mock-node', function () {
         assert.strictEqual(node.context().flow.get('test'), 4);
         assert.strictEqual(node.context().global.get('test'), 5);
 
-        var msg = {topic: 'topic', payload: 'payload'};
+        var msg = { topic: 'topic', payload: 'payload' };
         node.emit('input', msg);
         assert.strictEqual(node.sent(0), msg);
 
