@@ -1,22 +1,44 @@
 {
-  "name": "node-red-contrib-mock-node",
-  "version": "0.3.0",
-  "description": "Crude facility to mock NodeRED nodes for unit testing",
-  "main": "index.js",
-  "keywords": [ "node-red", "mock", "test", "mocha" ],
-  "scripts": {
-    "test": "node_modules/.bin/mocha tests/test.js"
-  },
-  "author": "@biddster",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/biddster/node-red-contrib-mock-node.git"
-  },
-  "bugs": {
-    "url": "https://github.com/biddster/node-red-contrib-mock-node/issues"
-  },
-  "devDependencies": {
-    "mocha": "^3.1.2"
-  }
+    "name": "node-red-contrib-mock-node",
+    "version": "0.4.0",
+    "description": "Crude facility to mock NodeRED nodes for unit testing",
+    "main": "index.js",
+    "keywords": ["node-red", "mock", "test", "mocha"],
+    "scripts": {
+        "test": "nyc --reporter=html node_modules/.bin/mocha -R spec ./tests/test.js"
+    },
+    "author": "@biddster",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/biddster/node-red-contrib-mock-node.git"
+    },
+    "bugs": {
+        "url": "https://github.com/biddster/node-red-contrib-mock-node/issues"
+    },
+    "devDependencies": {
+        "eslint": "^4.11.0",
+        "eslint-config-biddster": "^0.4.0",
+        "eslint-config-prettier": "^2.8.0",
+        "mocha": "^3.1.2",
+        "nyc": "^11.3.0",
+        "prettier": "^1.8.2"
+    },
+    "eslintConfig": {
+        "env": {
+            "es6": true,
+            "node": true,
+            "mocha": true
+        },
+        "parserOptions": {
+            "ecmaVersion": 6,
+            "sourceType": "module"
+        },
+        "extends": ["eslint-config-biddster/es6-node", "prettier"]
+    },
+    "prettier": {
+        "singleQuote": true,
+        "tabWidth": 4,
+        "printWidth": 96
+    }
 }

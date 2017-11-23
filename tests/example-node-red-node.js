@@ -22,11 +22,10 @@
  THE SOFTWARE.
  */
 
-module.exports = function (RED) {
+module.exports = function(RED) {
     'use strict';
 
-    RED.nodes.registerType('example-node-red-node', function (config) {
-
+    RED.nodes.registerType('example-node-red-node', function(config) {
         RED.nodes.createNode(this, config);
         var node = this;
 
@@ -34,7 +33,7 @@ module.exports = function (RED) {
         node.context().flow.set('test', config.testValue + 1);
         node.context().global.set('test', config.testValue + 2);
 
-        node.on('input', function (msg) {
+        node.on('input', function(msg) {
             node.send(msg);
             node.status({
                 fill: 'green',

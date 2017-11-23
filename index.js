@@ -22,7 +22,7 @@
  THE SOFTWARE.
  */
 
-"use strict";
+'use strict';
 var assert = require('assert');
 
 function Context(type) {
@@ -30,25 +30,29 @@ function Context(type) {
     this._type = type;
 }
 
-Context.prototype.get = function (key) {
+Context.prototype.get = function(key) {
     return this._values[key];
 };
 
-Context.prototype.set = function (key, value) {
+Context.prototype.set = function(key, value) {
     console.log(this._type + ' context: set [' + key + '] => [' + value + ']');
     this._values[key] = value;
 };
 
-module.exports = function (nodeRedModule, config, credentials) {
-    var _events = [], _status = undefined, _error = undefined, _sent = [], _context = new Context('node');
+module.exports = function(nodeRedModule, config, credentials, preConfigureNodeCallback) {
+    var _events = [],
+        _status = undefined,
+        _error = undefined,
+        _sent = [],
+        _context = new Context('node');
     _context.flow = new Context('flow');
     _context.global = new Context('global');
     var RED = {
         nodes: {
-            registerType: function (nodeName, nodeConfigFunc) {
+            registerType: function(nodeName, nodeConfigFunc) {
                 this.nodeConfigFunc = nodeConfigFunc;
             },
-            createNode: function () {
+            createNode: function() {
                 // TODO write me
             }
         }
@@ -56,35 +60,38 @@ module.exports = function (nodeRedModule, config, credentials) {
     var node = {
         log: console.log,
         warn: console.log,
-        error: function (error, msg) {
+        error: function(error, msg) {
             console.log(error);
             if (error) _error = error;
             return _error;
         },
-        on: function (event, eventFunc) {
+        on: function(event, eventFunc) {
             _events[event] = eventFunc;
         },
         credentials: credentials,
-        emit: function (event, data) {
+        emit: function(event, data) {
             _events[event](data);
         },
-        status: function (status) {
+        status: function(status) {
             if (status) _status = status;
             return _status;
         },
-        send: function (msg) {
+        send: function(msg) {
             assert(msg);
             _sent.push(msg);
         },
-        sent: function (index) {
+        sent: function(index) {
             if (typeof index !== 'undefined') return _sent[index];
             return _sent;
         },
-        context: function () {
+        context: function() {
             return _context;
         }
     };
     nodeRedModule(RED);
+    if (preConfigureNodeCallback) {
+        preConfigureNodeCallback(nodeRedModule, node);
+    }
     RED.nodes.nodeConfigFunc.call(node, config);
     return node;
 };
