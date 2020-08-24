@@ -22,76 +22,89 @@
  THE SOFTWARE.
  */
 
-'use strict';
-var assert = require('assert');
+const Assert = require('assert');
 
+// eslint-disable-next-line func-style
 function Context(type) {
     this._values = {};
     this._type = type;
 }
 
-Context.prototype.get = function(key) {
+Context.prototype.get = function (key) {
     return this._values[key];
 };
 
-Context.prototype.set = function(key, value) {
+Context.prototype.set = function (key, value) {
     console.log(this._type + ' context: set [' + key + '] => [' + value + ']');
     this._values[key] = value;
 };
 
-module.exports = function(nodeRedModule, config, credentials, preConfigureNodeCallback) {
-    var _events = [],
-        _status = undefined,
-        _error = undefined,
-        _sent = [],
-        _context = new Context('node');
+module.exports = function (nodeRedModule, config, credentials, preConfigureNodeCallback) {
+    let _status = undefined;
+    let _error = undefined;
+
+    const _events = [];
+    const _sent = [];
+
+    const _context = new Context('node');
     _context.flow = new Context('flow');
     _context.global = new Context('global');
-    var RED = {
+
+    const RED = {
         nodes: {
-            registerType: function(nodeName, nodeConfigFunc) {
+            registerType: function (nodeName, nodeConfigFunc) {
                 this.nodeConfigFunc = nodeConfigFunc;
             },
-            createNode: function() {
+            createNode: function () {
                 // TODO write me
-            }
-        }
+            },
+        },
     };
-    var node = {
+    const node = {
         log: console.log,
         warn: console.log,
-        error: function(error, msg) {
+        error: function (error, msg) {
             console.log(error);
-            if (error) _error = error;
+            if (error) {
+                _error = error;
+            }
+
             return _error;
         },
-        on: function(event, eventFunc) {
+        on: function (event, eventFunc) {
             _events[event] = eventFunc;
         },
-        credentials: credentials,
-        emit: function(event, data) {
+        credentials,
+        emit: function (event, data) {
             _events[event](data);
         },
-        status: function(status) {
-            if (status) _status = status;
+        status: function (status) {
+            if (status) {
+                _status = status;
+            }
+
             return _status;
         },
-        send: function(msg) {
-            assert(msg);
+        send: function (msg) {
+            Assert(msg);
             _sent.push(msg);
         },
-        sent: function(index) {
-            if (typeof index !== 'undefined') return _sent[index];
+        sent: function (index) {
+            if (typeof index !== 'undefined') {
+                return _sent[index];
+            }
+
             return _sent;
         },
-        context: function() {
+        context: function () {
             return _context;
-        }
+        },
     };
     nodeRedModule(RED);
     if (preConfigureNodeCallback) {
         preConfigureNodeCallback(nodeRedModule, node);
     }
+
     RED.nodes.nodeConfigFunc.call(node, config);
     return node;
 };
