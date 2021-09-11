@@ -1,6 +1,6 @@
 {
     "name": "node-red-contrib-mock-node",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "Crude facility to mock NodeRED nodes for unit testing",
     "main": "index.js",
     "keywords": [
